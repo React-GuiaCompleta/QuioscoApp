@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,27 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Producto {
+  // @id es un helper, garantiza que el campo
+  // id sea un id, osea le dá el comportamiento
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  precio      Float
+  imagen      String
+  // 1 --
+  // Relación, se relaciona con el modelo de Categoria
+  // Cada producto va a tener una categoria
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  icono     String
+  // 2
+  // Una categoria puede tener muchos productos
+  productos Producto[]
 }
